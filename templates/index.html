@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Car Scraper</title>
+</head>
+<body>
+    <h1>Search for Used Cars</h1>
+    <form method="POST">
+        <input type="text" name="make" placeholder="Make (e.g., Audi)" required>
+        <input type="text" name="model" placeholder="Model (e.g., A4)" required>
+        <input type="number" name="year_from" placeholder="Year From" required>
+        <input type="number" name="year_to" placeholder="Year To" required>
+        <input type="number" name="price_from" placeholder="Price Min" required>
+        <input type="number" name="price_to" placeholder="Price Max" required>
+        <input type="number" name="mileage_from" placeholder="Mileage Min" required>
+        <input type="number" name="mileage_to" placeholder="Mileage Max" required>
+        <button type="submit">Search</button>
+    </form>
+
+    {% if cars %}
+        <h2>Results</h2>
+        <table border="1">
+            <tr>
+                <th>Image</th>
+                <th>Title</th>
+                <th>Price</th>
+                <th>Mileage</th>
+            </tr>
+            {% for car in cars %}
+            <tr>
+                <td><img src="{{ car.Image }}" width="100"></td>
+                <td>{{ car.Title }}</td>
+                <td>{{ car.Price }}</td>
+                <td>{{ car.Mileage }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    {% endif %}
+</body>
+</html>
