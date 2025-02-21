@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Car Data Export</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 10px;
+            border: 1px solid #ddd;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+    </style>
+</head>
+<body>
+    <h1>Car Data Export</h1>
+    <table>
+        <tr>
+            <th>Title</th>
+            <th>Price</th>
+            <th>Mileage</th>
+            <th>Features</th>
+        </tr>
+        {% for car in cars %}
+        <tr>
+            <td>{{ car['Title'] }}</td>
+            <td>{{ car['Price'] }}</td>
+            <td>{{ car['Mileage'] }}</td>
+            <td>{{ car['Features'] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>
