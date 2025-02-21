@@ -4,39 +4,116 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Car Scraper</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        input, button {
+            margin: 5px 0;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            background: #28a745;
+            color: white;
+            cursor: pointer;
+            border: none;
+        }
+        button:hover {
+            background: #218838;
+        }
+        .table-container {
+            overflow-x: auto;
+            margin-top: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background: #007bff;
+            color: white;
+        }
+        img {
+            max-width: 100px;
+            border-radius: 5px;
+        }
+        pre {
+            background: #eee;
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+    </style>
 </head>
 <body>
+
+<div class="container">
     <h1>Search for Used Cars</h1>
     <form method="POST">
-        <input type="text" name="make" placeholder="Make (e.g., Audi)" required>
-        <input type="text" name="model" placeholder="Model (e.g., A4)" required>
-        <input type="number" name="year_from" placeholder="Year From" required>
-        <input type="number" name="year_to" placeholder="Year To" required>
-        <input type="number" name="price_from" placeholder="Price Min" required>
-        <input type="number" name="price_to" placeholder="Price Max" required>
-        <input type="number" name="mileage_from" placeholder="Mileage Min" required>
-        <input type="number" name="mileage_to" placeholder="Mileage Max" required>
+        <input type="text" name="keyword" placeholder="Keyword (e.g., Audi A3 2014)">
+        <input type="text" name="make" placeholder="Make">
+        <input type="text" name="model" placeholder="Model">
+        <input type="number" name="year_from" placeholder="Year From">
+        <input type="number" name="year_to" placeholder="Year To">
+        <input type="number" name="price_from" placeholder="Min Price">
+        <input type="number" name="price_to" placeholder="Max Price">
+        <input type="number" name="mileage_from" placeholder="Min Mileage">
+        <input type="number" name="mileage_to" placeholder="Max Mileage">
         <button type="submit">Search</button>
     </form>
 
     {% if cars %}
-        <h2>Results</h2>
-        <table border="1">
-            <tr>
-                <th>Image</th>
-                <th>Title</th>
-                <th>Price</th>
-                <th>Mileage</th>
-            </tr>
-            {% for car in cars %}
-            <tr>
-                <td><img src="{{ car.Image }}" width="100"></td>
-                <td>{{ car.Title }}</td>
-                <td>{{ car.Price }}</td>
-                <td>{{ car.Mileage }}</td>
-            </tr>
-            {% endfor %}
-        </table>
+        <div class="table-container">
+            <h2>Results</h2>
+            <table>
+                <tr><th>Image</th><th>Title</th><th>Price</th><th>Mileage</th><th>Features</th></tr>
+                {% for car in cars %}
+                <tr>
+                    <td><img src="{{ car['Image'] }}"></td>
+                    <td>{{ car['Title'] }}</td>
+                    <td>{{ car['Price'] }}</td>
+                    <td>{{ car['Mileage'] }}</td>
+                    <td>{{ car['Features'] }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    {% else %}
+        <p>No cars found. Try different search criteria.</p>
     {% endif %}
+
+    <h2>Debug Data (Extracted Mileage Values)</h2>
+    <pre>{{ debug_data }}</pre>
+
+</div>
+
 </body>
 </html>
