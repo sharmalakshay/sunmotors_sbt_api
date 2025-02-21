@@ -4,28 +4,43 @@ from bs4 import BeautifulSoup
 import re
 import pdfkit
 import io
+import json
 
 app = Flask(__name__)
 
 def get_car_data(make="", model="", year_from=None, year_to=None, price_from=None, price_to=None, mileage_from=None, mileage_to=None, keyword=""):
     base_url = "https://www.sbtjapan.com/used-cars/"
     
-    # If a keyword search is provided, ignore other filters
-    if keyword:
-        params = {"keyword": keyword}
-    else:
-        params = {
-            "make": make if make else "",
-            "model": model if model else "",
-            "year_f": year_from if year_from else "",
-            "year_t": year_to if year_to else "",
-            "price_f": price_from if price_from else "",
-            "price_t": price_to if price_to else "",
-            "mile_f": mileage_from if mileage_from else "",
-            "mile_t": mileage_to if mileage_to else "",
-            "search_box": 1,
-            "sort": 46
-        }
+    params = {
+        "steering": "all",
+        "type": 0,
+        "sub_body_type": 0,
+        "drive": 0,
+        "price_t": price_to if price_to else "",
+        "cc_f": 0,
+        "cc_t": 0,
+        "mile_f": mileage_from // 1000 if mileage_from else "",
+        "mile_t": mileage_to // 1000 if mileage_to else "",
+        "trans": 0,
+        "fuel": 0,
+        "color": 0,
+        "loadClass": 0,
+        "engineType": 0,
+        "location": 0,
+        "port": 0,
+        "search_box": 1,
+        "locationIds": 0,
+        "d_country": 76,
+        "d_port": 119,
+        "ship_type": 0,
+        "FreightChk": "yes",
+        "currency": 2,
+        "insurance": 1,
+        "fav_currency": 2,
+        "fav_d_country": 76,
+        "fav_insurance": 2,
+        "sort": 46
+    }
 
     headers = {
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
@@ -71,8 +86,36 @@ def get_car_data(make="", model="", year_from=None, year_to=None, price_from=Non
     while len(car_features) < len(car_titles):  
         car_features.append("N/A")  # Fill missing values
 
+    # Extract additional details
+    car_details = []
+    for car in soup.find_all("div", class_="car_info_right"):
+        details = {}
+        for detail in car.find_all("p"):
+            key_value = detail.get_text(strip=True).split(":")
+            if len(key_value) == 2:
+                details[key_value[0].strip()] = key_value[1].strip()
+        car_details.append(details)
+    
+    while len(car_details) < len(car_titles):  
+        car_details.append({})  # Fill missing values
+
+    # Extract JSON data
+    script_tag = soup.find("script", text=re.compile("window.__INITIAL_STATE__"))
+    if script_tag:
+        json_text = re.search(r"window.__INITIAL_STATE__\s*=\s*(\{.*\})", script_tag.string)
+        if json_text:
+            json_data = json.loads(json_text.group(1))
+            for i, car in enumerate(json_data.get("cars", [])):
+                if i < len(car_data):
+                    car_data[i].update({
+                        "Engine": car.get("engine", "N/A"),
+                        "Transmission": car.get("transmission", "N/A"),
+                        "Fuel": car.get("fuel", "N/A"),
+                        "Color": car.get("color", "N/A")
+                    })
+
     # Ensure correct matching of extracted data
-    total_cars = min(len(car_images), len(car_prices), len(car_titles), len(car_mileages), len(car_features))
+    total_cars = min(len(car_images), len(car_prices), len(car_titles), len(car_mileages), len(car_features), len(car_details))
 
     for i in range(total_cars):
         car_data.append({
@@ -80,7 +123,8 @@ def get_car_data(make="", model="", year_from=None, year_to=None, price_from=Non
             "Title": car_titles[i],
             "Price": car_prices[i],
             "Mileage": car_mileages[i],
-            "Features": car_features[i]
+            "Features": car_features[i],
+            "Details": car_details[i]
         })
 
     return car_data if car_data else [{"Error": "No cars found"}]
