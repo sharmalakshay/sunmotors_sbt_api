@@ -90,28 +90,27 @@
         <button type="submit">Search</button>
     </form>
 
-    {% if cars %}
-        <div class="table-container">
-            <h2>Results</h2>
-            <table>
-                <tr><th>Image</th><th>Title</th><th>Price</th><th>Mileage</th><th>Features</th></tr>
-                {% for car in cars %}
-                <tr>
-                    <td><img src="{{ car['Image'] }}"></td>
-                    <td>{{ car['Title'] }}</td>
-                    <td>{{ car['Price'] }}</td>
-                    <td>{{ car['Mileage'] }}</td>
-                    <td>{{ car['Features'] }}</td>
-                </tr>
-                {% endfor %}
-            </table>
-        </div>
-    {% else %}
-        <p>No cars found. Try different search criteria.</p>
-    {% endif %}
-
-    <!-- <h2>Debug Data (Extracted Mileage Values)</h2>
-    <pre>{{ debug_data }}</pre> -->
+    <div id="resultsContainer">
+        {% if cars %}
+            <div class="table-container">
+                <h2>Results</h2>
+                <table>
+                    <tr><th>Image</th><th>Title</th><th>Price</th><th>Mileage</th><th>Features</th></tr>
+                    {% for car in cars %}
+                    <tr>
+                        <td><img src="{{ car['Image'] }}"></td>
+                        <td>{{ car['Title'] }}</td>
+                        <td>{{ car['Price'] }}</td>
+                        <td>{{ car['Mileage'] }}</td>
+                        <td>{{ car['Features'] }}</td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        {% elif search_performed %}
+            <p>No cars found. Try different search criteria.</p>
+        {% endif %}
+    </div>
 
 </div>
 

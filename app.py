@@ -86,8 +86,10 @@ def get_car_data(make="", model="", year_from=None, year_to=None, price_from=Non
 @app.route('/', methods=['GET', 'POST'])
 def index():
     cars = []
+    search_performed = False
 
     if request.method == 'POST':
+        search_performed = True
         keyword = request.form.get("keyword", "").strip()
         make = request.form.get("make", "")
         model = request.form.get("model", "")
@@ -108,7 +110,7 @@ def index():
 
         cars = get_car_data(make, model, year_from, year_to, price_from, price_to, mileage_from, mileage_to, keyword)
 
-    return render_template("index.html", cars=cars)
+    return render_template("index.html", cars=cars, search_performed=search_performed)
 
 if __name__ == '__main__':
     app.run(debug=True)
