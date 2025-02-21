@@ -88,6 +88,7 @@
         <input type="number" name="mileage_from" placeholder="Min Mileage">
         <input type="number" name="mileage_to" placeholder="Max Mileage">
         <button type="submit">Search</button>
+        <button type="button" id="exportButton">Export Results</button>
     </form>
 
     <div id="resultsContainer">
@@ -113,6 +114,36 @@
     </div>
 
 </div>
+
+<script>
+    document.getElementById('exportButton').addEventListener('click', function() {
+        const cars = {{ cars|tojson }};
+        if (cars.length === 0) {
+            alert('No cars to export');
+            return;
+        }
+
+        fetch('/export', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ cars: cars })
+        })
+        .then(response => response.blob())
+        .then(blob => {
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.style.display = 'none';
+            a.href = url;
+            a.download = 'car_data.pdf';
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+        })
+        .catch(error => console.error('Error exporting data:', error));
+    });
+</script>
 
 </body>
 </html>

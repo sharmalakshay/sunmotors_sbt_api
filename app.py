@@ -1,7 +1,10 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, send_file
 import requests
 from bs4 import BeautifulSoup
 import re
+from reportlab.lib.pagesizes import letter
+from reportlab.pdfgen import canvas
+import io
 
 app = Flask(__name__)
 
@@ -82,6 +85,34 @@ def get_car_data(make="", model="", year_from=None, year_to=None, price_from=Non
         })
 
     return car_data if car_data else [{"Error": "No cars found"}]
+
+@app.route('/export', methods=['POST'])
+def export():
+    cars = request.json.get('cars', [])
+    if not cars:
+        return {"Error": "No cars to export"}, 400
+
+    output = io.BytesIO()
+    pdf = canvas.Canvas(output, pagesize=letter)
+    width, height = letter
+
+    pdf.setTitle("Car Data Export")
+    pdf.drawString(30, height - 30, "Car Data Export")
+
+    y = height - 50
+    for car in cars:
+        pdf.drawString(30, y, f"Title: {car['Title']}")
+        pdf.drawString(30, y - 15, f"Price: {car['Price']}")
+        pdf.drawString(30, y - 30, f"Mileage: {car['Mileage']}")
+        pdf.drawString(30, y - 45, f"Features: {car['Features']}")
+        y -= 75
+        if y < 50:
+            pdf.showPage()
+            y = height - 50
+
+    pdf.save()
+    output.seek(0)
+    return send_file(output, mimetype='application/pdf', as_attachment=True, download_name='car_data.pdf')
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
