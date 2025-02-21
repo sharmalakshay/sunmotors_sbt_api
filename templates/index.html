@@ -88,7 +88,9 @@
         <input type="number" name="mileage_from" placeholder="Min Mileage">
         <input type="number" name="mileage_to" placeholder="Max Mileage">
         <button type="submit">Search</button>
+        {% if search_performed %}
         <button type="button" id="exportButton">Export Results</button>
+        {% endif %}
     </form>
 
     <div id="resultsContainer">
@@ -116,7 +118,7 @@
 </div>
 
 <script>
-    document.getElementById('exportButton').addEventListener('click', function() {
+    document.getElementById('exportButton')?.addEventListener('click', function() {
         const cars = {{ cars|tojson }};
         if (cars.length === 0) {
             alert('No cars to export');
