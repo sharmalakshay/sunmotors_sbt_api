@@ -98,7 +98,7 @@
             <div class="table-container">
                 <h2>Results</h2>
                 <table>
-                    <tr><th>Image</th><th>Title</th><th>Price</th><th>Mileage</th><th>Features</th><th>Details</th><th>Engine</th><th>Transmission</th><th>Fuel</th><th>Color</th></tr>
+                    <tr><th>Image</th><th>Title</th><th>Price</th><th>Mileage</th><th>Features</th><th>Details</th></tr>
                     {% for car in cars %}
                     <tr>
                         <td><img src="{{ car['Image'] }}"></td>
@@ -109,10 +109,6 @@
                         <td>
                             <pre>{{ car['Details'] | tojson }}</pre>
                         </td>
-                        <td>{{ car['Engine'] }}</td>
-                        <td>{{ car['Transmission'] }}</td>
-                        <td>{{ car['Fuel'] }}</td>
-                        <td>{{ car['Color'] }}</td>
                     </tr>
                     {% endfor %}
                 </table>
