@@ -15,8 +15,6 @@ COPY . .
 
 # Install Python dependencies
 RUN pip install --no-cache-dir -r requirements.txt
-RUN pip install --no-cache-dir pdfkit
-
 
 # Expose Flask app port
 EXPOSE 5000
