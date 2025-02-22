@@ -78,15 +78,15 @@
 <div class="container">
     <h1>Search for Used Cars</h1>
     <form method="POST">
-        <input type="text" name="keyword" placeholder="Keyword (e.g., Audi A3 2014)">
-        <input type="text" name="make" placeholder="Make">
-        <input type="text" name="model" placeholder="Model">
-        <input type="number" name="year_from" placeholder="Year From">
-        <input type="number" name="year_to" placeholder="Year To">
-        <input type="number" name="price_from" placeholder="Min Price">
-        <input type="number" name="price_to" placeholder="Max Price">
-        <input type="number" name="mileage_from" placeholder="Min Mileage">
-        <input type="number" name="mileage_to" placeholder="Max Mileage">
+        <input type="text" name="keyword" placeholder="Keyword (e.g., Audi A3 2014)" value="{{ request.form.keyword }}">
+        <input type="text" name="make" placeholder="Make" value="{{ request.form.make }}">
+        <input type="text" name="model" placeholder="Model" value="{{ request.form.model }}">
+        <input type="number" name="year_from" placeholder="Year From" value="{{ request.form.year_from }}">
+        <input type="number" name="year_to" placeholder="Year To" value="{{ request.form.year_to }}">
+        <input type="number" name="price_from" placeholder="Min Price" value="{{ request.form.price_from }}">
+        <input type="number" name="price_to" placeholder="Max Price" value="{{ request.form.price_to }}">
+        <input type="number" name="mileage_from" placeholder="Min Mileage" value="{{ request.form.mileage_from }}">
+        <input type="number" name="mileage_to" placeholder="Max Mileage" value="{{ request.form.mileage_to }}">
         <button type="submit">Search</button>
         {% if search_performed %}
         <button type="button" id="exportButton">Export Results</button>
