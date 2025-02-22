@@ -4,6 +4,7 @@ from bs4 import BeautifulSoup
 import re
 import pdfkit
 import io
+import json
 
 app = Flask(__name__)
 
@@ -74,50 +75,21 @@ def get_car_data(make="", model="", year_from=None, year_to=None, price_from=Non
 
     soup = BeautifulSoup(response.text, 'html.parser')
 
-    # Extract car details
+    # Extract car details from JSON-LD script tag
     car_data = []
-
-    car_images = [img["src"] for img in soup.find_all("img") if "dealercarphoto" in img.get("src", "")]
-    
-    car_prices = [span.get_text(strip=True) for span in soup.find_all("span") if "USD" in span.get_text()]
-    
-    car_titles = [h.get_text(strip=True) for h in soup.find_all(["h2", "h3"]) if "AUDI" in h.get_text(strip=True)]
-    
-    # Extract mileage correctly from car_info_right div
-    car_mileages = []
-    for car in soup.find_all("div", class_="car_info_right"):
-        mileage_tag = car.find("h3", string="Mileage")
-        if mileage_tag:
-            mileage_p = mileage_tag.find_next("p")
-            mileage = mileage_p.get_text(strip=True) if mileage_p else "N/A"
-            car_mileages.append(mileage)
-    
-    while len(car_mileages) < len(car_titles):  
-        car_mileages.append("N/A")  # Fill missing values
-
-    # Extract features uniquely (removes duplicates)
-    car_features = []
-    for div in soup.find_all("div"):
-        text = div.get_text(strip=True)
-        features_list = list(set(re.findall(r"(Air Conditioner|Cruise Control|Navigation System|ABS|Alloy Wheels|Back Camera|Leather Seat|Sun Roof)", text)))
-
-        if features_list:
-            car_features.append(", ".join(features_list))
-    
-    while len(car_features) < len(car_titles):  
-        car_features.append("N/A")  # Fill missing values
-
-    # Ensure correct matching of extracted data
-    total_cars = min(len(car_images), len(car_prices), len(car_titles), len(car_mileages), len(car_features))
-
-    for i in range(total_cars):
-        car_data.append({
-            "Image": car_images[i],
-            "Title": car_titles[i],
-            "Price": car_prices[i],
-            "Mileage": car_mileages[i],
-            "Features": car_features[i]
-        })
+    script_tag = soup.find("script", type="application/ld+json")
+    if script_tag:
+        json_data = json.loads(script_tag.string)
+        if "itemListElement" in json_data:
+            for item in json_data["itemListElement"]:
+                car = item["item"]
+                car_data.append({
+                    "Image": car["image"],
+                    "Title": car["name"],
+                    "Price": car["offers"][0]["price"],
+                    "Mileage": "N/A",  # Mileage is not available in JSON-LD
+                    "Features": car["description"]
+                })
 
     return car_data, response.url
 
