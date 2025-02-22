@@ -34,6 +34,19 @@
             max-width: 400px;
             margin-bottom: 15px;
         }
+        .form-row {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            max-width: 800px;
+        }
+        .form-row .form-group {
+            flex: 1;
+            margin-right: 10px;
+        }
+        .form-row .form-group:last-child {
+            margin-right: 0;
+        }
         input, button {
             width: 100%;
             padding: 10px;
@@ -94,6 +107,16 @@
                 font-size: 14px;
                 padding: 8px;
             }
+            .form-row {
+                flex-direction: column;
+            }
+            .form-row .form-group {
+                margin-right: 0;
+                margin-bottom: 10px;
+            }
+            .form-row .form-group:last-child {
+                margin-bottom: 0;
+            }
         }
     </style>
 </head>
@@ -106,29 +129,37 @@
             <input type="text" id="keyword" name="keyword" placeholder="Keyword (e.g., Audi A3 2014)" value="{{ request.form.get('keyword', '') }}">
         </div>
         <div class="divider">OR</div>
-        <div class="form-group details-section">
-            <input type="text" id="make" name="make" placeholder="Make" value="{{ request.form.get('make', '') }}">
+        <div class="form-row">
+            <div class="form-group details-section">
+                <input type="text" id="make" name="make" placeholder="Make" value="{{ request.form.get('make', '') }}">
+            </div>
+            <div class="form-group details-section">
+                <input type="text" id="model" name="model" placeholder="Model" value="{{ request.form.get('model', '') }}">
+            </div>
         </div>
-        <div class="form-group details-section">
-            <input type="text" id="model" name="model" placeholder="Model" value="{{ request.form.get('model', '') }}">
+        <div class="form-row">
+            <div class="form-group details-section">
+                <input type="number" id="year_from" name="year_from" placeholder="Year From" value="{{ request.form.get('year_from', '') }}">
+            </div>
+            <div class="form-group details-section">
+                <input type="number" id="year_to" name="year_to" placeholder="Year To" value="{{ request.form.get('year_to', '') }}">
+            </div>
         </div>
-        <div class="form-group details-section">
-            <input type="number" id="year_from" name="year_from" placeholder="Year From" value="{{ request.form.get('year_from', '') }}">
+        <div class="form-row">
+            <div class="form-group details-section">
+                <input type="number" id="price_from" name="price_from" placeholder="Min Price" value="{{ request.form.get('price_from', '') }}">
+            </div>
+            <div class="form-group details-section">
+                <input type="number" id="price_to" name="price_to" placeholder="Max Price" value="{{ request.form.get('price_to', '') }}">
+            </div>
         </div>
-        <div class="form-group details-section">
-            <input type="number" id="year_to" name="year_to" placeholder="Year To" value="{{ request.form.get('year_to', '') }}">
-        </div>
-        <div class="form-group details-section">
-            <input type="number" id="price_from" name="price_from" placeholder="Min Price" value="{{ request.form.get('price_from', '') }}">
-        </div>
-        <div class="form-group details-section">
-            <input type="number" id="price_to" name="price_to" placeholder="Max Price" value="{{ request.form.get('price_to', '') }}">
-        </div>
-        <div class="form-group details-section">
-            <input type="number" id="mileage_from" name="mileage_from" placeholder="Min Mileage" value="{{ request.form.get('mileage_from', '') }}">
-        </div>
-        <div class="form-group details-section">
-            <input type="number" id="mileage_to" name="mileage_to" placeholder="Max Mileage" value="{{ request.form.get('mileage_to', '') }}">
+        <div class="form-row">
+            <div class="form-group details-section">
+                <input type="number" id="mileage_from" name="mileage_from" placeholder="Min Mileage" value="{{ request.form.get('mileage_from', '') }}">
+            </div>
+            <div class="form-group details-section">
+                <input type="number" id="mileage_to" name="mileage_to" placeholder="Max Mileage" value="{{ request.form.get('mileage_to', '') }}">
+            </div>
         </div>
         <button type="submit">Search</button>
         {% if search_performed %}
