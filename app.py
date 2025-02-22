@@ -15,14 +15,6 @@ def get_car_data(make="", model="", year_from=None, year_to=None, price_from=Non
         params = {"keyword": keyword}
     else:
         params = {
-            "make": make if make else "",
-            "model": model if model else "",
-            "year_f": year_from if year_from else "",
-            "year_t": year_to if year_to else "",
-            "price_f": price_from if price_from else "",
-            "price_t": price_to if price_to else "",
-            "mile_f": mileage_from if mileage_from else "",
-            "mile_t": mileage_to if mileage_to else "",
             "search_box": 1,
             "sort": 46,
             "steering": "all",
@@ -49,6 +41,24 @@ def get_car_data(make="", model="", year_from=None, year_to=None, price_from=Non
             "fav_d_country": 76,
             "fav_insurance": 2
         }
+
+        # Add filters only if they have values
+        if make:
+            params["make"] = make
+        if model:
+            params["model"] = model
+        if year_from:
+            params["year_f"] = year_from
+        if year_to:
+            params["year_t"] = year_to
+        if price_from:
+            params["price_f"] = price_from
+        if price_to:
+            params["price_t"] = price_to
+        if mileage_from:
+            params["mile_f"] = mileage_from
+        if mileage_to:
+            params["mile_t"] = mileage_to
 
     headers = {
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
