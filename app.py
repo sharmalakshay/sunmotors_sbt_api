@@ -24,7 +24,30 @@ def get_car_data(make="", model="", year_from=None, year_to=None, price_from=Non
             "mile_f": mileage_from if mileage_from else "",
             "mile_t": mileage_to if mileage_to else "",
             "search_box": 1,
-            "sort": 46
+            "sort": 46,
+            "steering": "all",
+            "type": 0,
+            "sub_body_type": 0,
+            "drive": 0,
+            "cc_f": 0,
+            "cc_t": 0,
+            "trans": 0,
+            "fuel": 0,
+            "color": 0,
+            "loadClass": 0,
+            "engineType": 0,
+            "location": 0,
+            "port": 0,
+            "locationIds": 0,
+            "d_country": 76,
+            "d_port": 119,
+            "ship_type": 0,
+            "FreightChk": "yes",
+            "currency": 2,
+            "insurance": 1,
+            "fav_currency": 2,
+            "fav_d_country": 76,
+            "fav_insurance": 2
         }
 
     headers = {
