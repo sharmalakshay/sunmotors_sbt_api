@@ -78,6 +78,12 @@
             background-color: #e9ecef;
             cursor: not-allowed;
         }
+        .divider {
+            text-align: center;
+            margin: 20px 0;
+            font-weight: bold;
+            color: #333;
+        }
     </style>
 </head>
 <body>
@@ -88,6 +94,7 @@
         <div class="keyword-section">
             <input type="text" id="keyword" name="keyword" placeholder="Keyword (e.g., Audi A3 2014)" value="{{ request.form.get('keyword', '') }}">
         </div>
+        <div class="divider">OR</div>
         <div class="details-section">
             <input type="text" id="make" name="make" placeholder="Make" value="{{ request.form.get('make', '') }}">
             <input type="text" id="model" name="model" placeholder="Model" value="{{ request.form.get('model', '') }}">
@@ -134,6 +141,16 @@
         document.querySelectorAll('.details-section input').forEach(input => {
             input.disabled = isKeywordFilled;
         });
+    });
+
+    // Ensure fields are disabled on page load if keyword field has text
+    document.addEventListener('DOMContentLoaded', function() {
+        const keywordField = document.getElementById('keyword');
+        if (keywordField.value.trim().length > 0) {
+            document.querySelectorAll('.details-section input').forEach(input => {
+                input.disabled = true;
+            });
+        }
     });
 
     document.getElementById('exportButton')?.addEventListener('click', function() {
