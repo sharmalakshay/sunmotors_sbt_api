@@ -65,6 +65,9 @@ def get_car_data(make="", model="", year_from=None, year_to=None, price_from=Non
     }
 
     response = requests.get(base_url, params=params, headers=headers)
+    
+    # Print the URL being visited for debugging
+    print(response.url)
 
     if response.status_code != 200:
         return [{"Error": f"Failed to fetch data. Status Code: {response.status_code}"}]
@@ -132,6 +135,7 @@ def export():
 def index():
     cars = []
     search_performed = False
+    debug_url = None
 
     if request.method == 'POST':
         search_performed = True
@@ -154,8 +158,9 @@ def index():
         mileage_to = int(mileage_to) if mileage_to else None
 
         cars = get_car_data(make, model, year_from, year_to, price_from, price_to, mileage_from, mileage_to, keyword)
+        debug_url = request.url
 
-    return render_template("index.html", cars=cars, search_performed=search_performed)
+    return render_template("index.html", cars=cars, search_performed=search_performed, debug_url=debug_url)
 
 if __name__ == '__main__':
     app.run(debug=True)

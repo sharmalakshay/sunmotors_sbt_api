@@ -188,6 +188,12 @@
         {% endif %}
     </div>
 
+    {% if debug_url %}
+    <div class="debug-url">
+        <h3>Debug URL</h3>
+        <pre>{{ debug_url }}</pre>
+    </div>
+    {% endif %}
 </div>
 
 <script>
