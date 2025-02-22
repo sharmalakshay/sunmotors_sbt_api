@@ -70,7 +70,7 @@ def get_car_data(make="", model="", year_from=None, year_to=None, price_from=Non
     print(response.url)
 
     if response.status_code != 200:
-        return [{"Error": f"Failed to fetch data. Status Code: {response.status_code}"}]
+        return [], response.url
 
     soup = BeautifulSoup(response.text, 'html.parser')
 
@@ -119,7 +119,7 @@ def get_car_data(make="", model="", year_from=None, year_to=None, price_from=Non
             "Features": car_features[i]
         })
 
-    return car_data if car_data else [{"Error": "No cars found"}]
+    return car_data, response.url
 
 @app.route('/export', methods=['POST'])
 def export():
@@ -157,8 +157,7 @@ def index():
         mileage_from = int(mileage_from) if mileage_from else None
         mileage_to = int(mileage_to) if mileage_to else None
 
-        cars = get_car_data(make, model, year_from, year_to, price_from, price_to, mileage_from, mileage_to, keyword)
-        debug_url = request.url
+        cars, debug_url = get_car_data(make, model, year_from, year_to, price_from, price_to, mileage_from, mileage_to, keyword)
 
     return render_template("index.html", cars=cars, search_performed=search_performed, debug_url=debug_url)
 
