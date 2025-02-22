@@ -57,9 +57,9 @@ def get_car_data(make="", model="", year_from=None, year_to=None, price_from=Non
         if price_to:
             params["price_t"] = price_to
         if mileage_from:
-            params["mile_f"] = mileage_from
+            params["mile_f"] = mileage_from/1000
         if mileage_to:
-            params["mile_t"] = mileage_to
+            params["mile_t"] = mileage_to/1000
 
     headers = {
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
