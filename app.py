@@ -80,6 +80,7 @@ def get_car_data(make="", model="", year_from=None, year_to=None, price_from=Non
     car_images = [img["src"] for img in soup.find_all("img") if "dealercarphoto" in img.get("src", "")]
     car_prices = [span.get_text(strip=True) for span in soup.find_all("span") if "USD" in span.get_text()]
     car_titles = [h.get_text(strip=True) for h in soup.find_all(["h2", "h3"]) if "AUDI" in h.get_text(strip=True)]
+    car_stock_ids = [a["href"].split("/")[-2] for a in soup.find_all("a", href=True) if "/used-cars/" in a["href"]]
     
     car_mileages = []
     for car in soup.find_all("div", class_="car_info_right"):
@@ -102,7 +103,7 @@ def get_car_data(make="", model="", year_from=None, year_to=None, price_from=Non
     while len(car_features) < len(car_titles):  
         car_features.append("N/A")  # Fill missing values
 
-    total_cars = min(len(car_images), len(car_prices), len(car_titles), len(car_mileages), len(car_features))
+    total_cars = min(len(car_images), len(car_prices), len(car_titles), len(car_mileages), len(car_features), len(car_stock_ids))
 
     for i in range(total_cars):
         price_in_eur = float(car_prices[i].replace("USD", "").replace(",", "").strip()) * 3
@@ -112,7 +113,7 @@ def get_car_data(make="", model="", year_from=None, year_to=None, price_from=Non
             "Price": f"{price_in_eur:.2f} EUR",
             "Mileage": car_mileages[i],
             "Features": car_features[i],
-            "StockId": "N/A"  # Placeholder for stock ID
+            "StockId": car_stock_ids[i]
         })
 
     # Fallback to JSON-LD script tag if no results found
