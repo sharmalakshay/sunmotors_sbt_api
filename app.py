@@ -80,7 +80,7 @@ def get_car_data(make="", model="", year_from=None, year_to=None, price_from=Non
     car_images = [img["src"] for img in soup.find_all("img") if "dealercarphoto" in img.get("src", "")]
     car_prices = [span.get_text(strip=True) for span in soup.find_all("span") if "USD" in span.get_text()]
     car_titles = [h.get_text(strip=True) for h in soup.find_all(["h2", "h3"]) if "AUDI" in h.get_text(strip=True)]
-    car_stock_ids = [a["href"].split("/")[-2] for a in soup.find_all("a", href=True) if "/used-cars/" in a["href"]]
+    car_stock_ids = [p.get_text(strip=True).replace("Stock Id: ", "") for p in soup.find_all("p", class_="stock_num")]
     
     car_mileages = []
     for car in soup.find_all("div", class_="car_info_right"):
