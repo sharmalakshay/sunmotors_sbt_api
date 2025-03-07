@@ -106,7 +106,7 @@ def get_car_data(make="", model="", year_from=None, year_to=None, price_from=Non
     total_cars = min(len(car_images), len(car_prices), len(car_titles), len(car_mileages), len(car_features), len(car_stock_ids))
 
     for i in range(total_cars):
-        price_in_eur = float(car_prices[i].replace("USD", "").replace(",", "").strip()) * 3
+        price_in_eur = float(car_prices[i].replace("USD", "").replace(",", "").strip()) * 4
         car_data.append({
             "Image": car_images[i],
             "Title": car_titles[i],
