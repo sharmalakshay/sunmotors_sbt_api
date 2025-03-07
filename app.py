@@ -57,9 +57,9 @@ def get_car_data(make="", model="", year_from=None, year_to=None, price_from=Non
         if price_to:
             params["price_t"] = price_to
         if mileage_from:
-            params["mile_f"] = mileage_from/1000
+            params["mile_f"] = mileage_from / 1000
         if mileage_to:
-            params["mile_t"] = mileage_to/1000
+            params["mile_t"] = mileage_to / 1000
 
     headers = {
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
@@ -105,12 +105,14 @@ def get_car_data(make="", model="", year_from=None, year_to=None, price_from=Non
     total_cars = min(len(car_images), len(car_prices), len(car_titles), len(car_mileages), len(car_features))
 
     for i in range(total_cars):
+        price_in_eur = float(car_prices[i].replace("USD", "").replace(",", "").strip()) * 3
         car_data.append({
             "Image": car_images[i],
             "Title": car_titles[i],
-            "Price": car_prices[i],
+            "Price": f"{price_in_eur:.2f} EUR",
             "Mileage": car_mileages[i],
-            "Features": car_features[i]
+            "Features": car_features[i],
+            "StockId": "N/A"  # Placeholder for stock ID
         })
 
     # Fallback to JSON-LD script tag if no results found
@@ -125,9 +127,10 @@ def get_car_data(make="", model="", year_from=None, year_to=None, price_from=Non
                     car_data.append({
                         "Image": car["image"],
                         "Title": car["name"],
-                        "Price": euro_price,
+                        "Price": f"{float(euro_price) * 3:.2f} EUR" if euro_price != "N/A" else "N/A",
                         "Mileage": "N/A",  # Mileage is not available in JSON-LD
-                        "Features": car["description"]
+                        "Features": car["description"],
+                        "StockId": car["sku"]
                     })
 
     return car_data, response.url

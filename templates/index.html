@@ -171,7 +171,7 @@
             <div class="table-container">
                 <h2>Results</h2>
                 <table>
-                    <tr><th>Image</th><th>Title</th><th>Price</th><th>Mileage</th><th>Features</th></tr>
+                    <tr><th>Image</th><th>Title</th><th>Price</th><th>Mileage</th><th>Features</th><th>Stock ID</th></tr>
                     {% for car in cars %}
                     <tr>
                         <td><img src="{{ car['Image'] }}"></td>
@@ -179,6 +179,7 @@
                         <td>{{ car['Price'] }}</td>
                         <td>{{ car['Mileage'] }}</td>
                         <td>{{ car['Features'] }}</td>
+                        <td>{{ car['StockId'] }}</td>
                     </tr>
                     {% endfor %}
                 </table>
